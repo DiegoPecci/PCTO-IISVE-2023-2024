@@ -1,1 +1,0 @@
-Questo codice permette di controllare la colorazione dei led presenti all'interno del M5Stamp e del M5Capsule, con l'unica differenza che per passare da un dispositivo ad un altro è necessario modificare il numero del pin del led scritto nel codice.
