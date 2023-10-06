@@ -1,0 +1,65 @@
+Questo codice permette di scrivere sulla scheda SD da inserire nello slot del M5CoreS3 e di visualizzare ciò che è stato scritto e salvato sulla scheda SD sullo schermo del microcontrollore.
+Come per gli altri codici, per poter utilizzarlo bisognerà prima di tutto scaricare la libreria M5Unified.
+
+CODICE
+#include <M5CoreS3.h>
+void setup() {
+    M5.begin(true, true, true);
+    M5.Lcd.setTextSize(2);
+    M5.Lcd.setCursor(60, 0);
+    M5.Lcd.print("SD Card Example");
+    M5.Lcd.setCursor(0, 20);
+    M5.Lcd.print("Pls open the serial port.");
+    M5.Lcd.endWrite();
+
+    SPI.begin(SPI_SCK_PIN, SPI_MISO_PIN, SPI_MOSI_PIN, TFCARD_CS_PIN);
+    if (M5.Axp.isSDCardExist()) {
+        // Initialize the SD card. 
+        if (!SD.begin(GPIO_NUM_4, SPI, 25000000)) {
+            // Print a message if the SD card initialization
+            // fails orif the SD card does not exist.
+            USBSerial.println("Card failed, or not present");
+            while (1)
+                ;
+        }
+    } else {
+        USBSerial.println("Please insert SD card");
+    }
+
+    USBSerial.println("TF card initialized.");
+    // Check if the "/hello.txt" file exists.
+    if (SD.exists("/hello.txt")) {
+        USBSerial.println("hello.txt exists.");
+    } else {
+        USBSerial.println("hello.txt doesn't exist.");
+    }
+    USBSerial.println("Creating hello.txt");
+    File myFile = SD.open("/hello.txt",
+                          FILE_WRITE);  // Create a new file "/hello.txt".
+    if (myFile) {  // If the file is open, then write to it.
+        USBSerial.println("Writing to test.txt...");
+        myFile.println("SD test.");
+        myFile.close();  // Close the file. 
+        USBSerial.println("done.");
+    } else {
+        USBSerial.println("error opening test.txt");
+    }
+    delay(500);
+    // Open the file "/hello.txt" in read mode.
+    myFile = SD.open("/hello.txt", FILE_READ);
+    if (myFile) {
+        USBSerial.println("/hello.txt Content:");
+        // Read the data from the file and print it until the reading is
+        // complete. 
+        while (myFile.available()) {
+            USBSerial.write(myFile.read());
+        }
+        myFile.close();
+    } else {
+        USBSerial.println(
+            "error opening /hello.txt");  // If the file is not open.
+    }
+}
+void loop() {
+}
+
