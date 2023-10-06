@@ -1,4 +1,5 @@
 Questo codice permette di modificare la colorazione dei led presenti all'interno del M5StampS3 e del M5Capsule, con l'unica differenza che per passare da un dispositivo ad un altro è necessario modificare il numero del pin del led scritto nel codice.
+Prima di usare il codice sarà necessario installare la libreria M5Unified.
 
 CODICE (M5Capsule)
 //Press button to change LED status 
